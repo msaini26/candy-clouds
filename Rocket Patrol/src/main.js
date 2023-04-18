@@ -1,13 +1,13 @@
+// set game configurations
 let config = {
-    type: Phaser.CANVAS, // create game canvas
-    width: 640, // set game width
-    height: 480, // set game height
-    scene: [Menu, Play] // load in both scenes
+    type: Phaser.CANVAS, // init game canvas
+    width: 640, // init width
+    height: 480, // init height
+    scene: [ Menu, Play ] // init menu and play scenes
 }
 
-// init game
-let game = new Phaser.Game(config);
+let game = new Phaser.Game(config); // init new phaser game
 
 // set UI sizes
-let borderUISize = game.config.height / 15;
-let borderPadding = borderUISize / 3;
+let borderUISize = game.config.height / 15; // set UI height
+let borderPadding = borderUISize / 3; // set padding around game frame
