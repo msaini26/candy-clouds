@@ -10,6 +10,9 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
+
+        // load spritesheet
+        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
 
@@ -40,6 +43,39 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        //animation config
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
+            frameRate: 30
+        });
+
+        // initialize score
+        this.p1Score = 0;
+
+        // display score
+        let scoreConfig = {
+            fontFamily:'Inter', // set font
+            fontSize: '28px', // set font size
+            backgroundColor: '#F3B141', // set score background color
+            color: '#843605', // set text color
+            align: 'right', // align score to right side
+            padding: { // set padding around text
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100 // set max width
+        }
+        // add score text
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+
+        // 60-second play clock
+        scoreConfig.fixedWidth = 0;
+        this.clock = this.time.delayedCall(60000, () => {
+            // display game over text in middle of screen
+            this.add.text(game.config.width/2, game.config.height/2, 'Game Over', scoreConfig).setOrigin(0, 0);
+        })
     }
 
     // constant updates in game canvas
@@ -56,13 +92,16 @@ class Play extends Phaser.Scene {
 
         // checks collisions
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
-            console.log('kaboom ship 03');
+            this.p1Rocket.reset(); // reset rocket to "ground"
+            this.shipExplode(this.ship03); // reset ship03 position
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            console.log('kaboom ship 02');
+            this.p1Rocket.reset(); // reset rocket to "ground"
+            this.shipExplode(this.ship02); // reset ship03 position
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            console.log('kaboom ship 01');
+            this.p1Rocket.reset(); // reset rocket to "ground"
+            this.shipExplode(this.ship01); // reset ship03 position
         }
         
     }
@@ -77,5 +116,25 @@ class Play extends Phaser.Scene {
         } else {
             return false; // no collision
         }
+    }
+
+    // use explode automation when ship collides
+    // Inputs: ship
+    // Output: None, just display explosion animation
+    shipExplode(ship) {
+        // temporarily hide ship
+        ship.alpha = 0;
+        // create explosion sprite at ship's position
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        boom.anims.play('explode'); // play explode animation
+        boom.on('animationcomplete', () => { // callback after anim completes
+            ship.reset(); // reset ship position
+            ship.alpha = 1; // make ship visible again
+            boom.destroy(); // remove explosion sprite
+        });
+
+        // score add and repaint
+        this.p1Score += ship.points;
+        this.scoreLeft.text = this.p1Score;
     }
 }
