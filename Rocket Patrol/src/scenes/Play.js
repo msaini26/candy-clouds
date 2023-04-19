@@ -60,7 +60,7 @@ class Play extends Phaser.Scene {
             fontSize: '28px', // set font size
             backgroundColor: '#F3B141', // set score background color
             color: '#843605', // set text color
-            align: 'right', // align score to right side
+            align: 'center', // align score to the center
             padding: { // set padding around text
                 top: 5,
                 bottom: 5,
@@ -70,25 +70,39 @@ class Play extends Phaser.Scene {
         // add score text
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
 
+        // GAME OVER flag
+        this.gameOver = false;
+
         // 60-second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(60000, () => {
             // display game over text in middle of screen
-            this.add.text(game.config.width/2, game.config.height/2, 'Game Over', scoreConfig).setOrigin(0, 0);
-        })
+            this.add.text(game.config.width/2, game.config.height/2, 'Game Over', scoreConfig).setOrigin(0.5);
+            // display restart game message in parallel with game over
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
+            this.gameOver = true; // end the game
+        }, null, this);
     }
 
     // constant updates in game canvas
     update() {
+        // check key input for restart
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart(); // reset the scene
+        }
+
         // update tile sprite
         this.starfield.tilePositionX -= 4; // create moving starfield background
-        // update rocket class
-        this.p1Rocket.update();
+        
+        if (!this.gameOver) {
+            // update rocket class
+            this.p1Rocket.update(); // update rocket sprite
 
-        // update spaceships (x3)
-        this.ship01.update();
-        this.ship02.update();
-        this.ship03.update();
+            // update spaceships (x3)
+            this.ship01.update();
+            this.ship02.update();
+            this.ship03.update();
+        }   
 
         // checks collisions
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
