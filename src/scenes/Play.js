@@ -65,11 +65,27 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100 // set max width
+            fixedWidth: 70 // set max width
         }
+
+        // display score
+        let highScoreConfig = {
+            fontFamily:'Courier', // set font
+            fontSize: '28px', // set font size
+            backgroundColor: '#F3B141', // set score background color
+            color: '#843605', // set text color
+            align: 'center', // align score to the center
+            padding: { // set padding around text
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 275 // set max width
+        }
+
         // add score text
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
-
+        // add high score text
+        this.highScore = this.add.text(280 + borderUISize + borderPadding, borderUISize + borderPadding * 2, "High Score: " + localStorage.getItem('highscore'), highScoreConfig);
         // GAME OVER flag
         this.gameOver = false;
 
@@ -155,6 +171,21 @@ class Play extends Phaser.Scene {
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        // credit: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/localstorage/
+        // to understand how localStorage works
+
+
+        // update high score if doesn't exist already
+        if (localStorage.getItem('highscore' == null)) {
+            localStorage.setItem('highscore', this.p1Score);
+        }
+        
+        // update max score if greater than first item
+        else if (this.p1Score > localStorage.getItem('highscore')) {
+            localStorage.setItem('highscore', this.p1Score); // update score
+            this.highScore.text = "High Score: " + localStorage.getItem('highscore'); // updates high score as you beat it
+        }
 
         this.sound.play('sfx_explosion'); // play explosion sound effects
     }
