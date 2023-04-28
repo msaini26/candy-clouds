@@ -11,6 +11,10 @@ class Play extends Phaser.Scene {
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
 
+        // load background music
+        this.load.audio('background_music', './assets/background_music.mp3');
+        this.sound.decodeAudio('background_music', './assets/background_music.mp3');
+
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -43,6 +47,19 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        // background music configurations
+        let musicConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            loop: true,
+            delay: 0,
+        }
+
+        // create sound instance
+        var music = this.sound.add('background_music', musicConfig);
+        music.play(musicConfig); // play music with config settings
 
         //animation config
         this.anims.create({
@@ -98,10 +115,32 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true; // end the game
         }, null, this);
+
+         // display timer
+         let clockConfig = {
+            fontFamily:'Courier', // set font
+            fontSize: '28px', // set font size
+            backgroundColor: '#F3B141', // set score background color
+            color: '#843605', // set text color
+            align: 'center', // align score to the center
+            padding: { // set padding around text
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 50 // set max width
+        }
+
+        // timer
+        this.timer = this.add.text(borderUISize + borderPadding * 45, borderUISize + borderPadding * 35, 60, clockConfig);
+        clockConfig.fixedWidth = 0;
     }
 
     // constant updates in game canvas
     update() {
+
+        // timer
+        this.timer.text = Math.floor(this.clock.getRemainingSeconds());
+        
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart(); // reset the scene
