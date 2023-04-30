@@ -7,9 +7,15 @@ class Play extends Phaser.Scene {
     // preload assets
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('rocket', './assets/rocket.png'); // player rocket image
+        this.load.image('spaceship', './assets/spaceship.png'); // spaceship enemy image
+
+        // background layer assets credit to craftpix.net
+        // from their website, "You can download it absolutely for free and use it in your games for commercial purposes."
+        this.load.image('starfield', './assets/background/sky.png'); // sky background image
+        this.load.image('fog', './assets/background/fog.png'); // fog background image
+        this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
+        this.load.image('ground', './assets/background/ground.png'); // clouds background image
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
@@ -22,11 +28,15 @@ class Play extends Phaser.Scene {
 
     // create objects and instances in phaser canvas
     create() {
-         // place tile sprite
-         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        
+        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0); // place background tile sprite
+        this.fog = this.add.tileSprite(0, 0, 640, 480, 'fog').setOrigin(0,0); // fog background
+        this.clouds = this.add.tileSprite(0, -80, 640, 480, 'clouds').setOrigin(0,0); // clouds background
+        this.ground = this.add.tileSprite(0, 90, 640, 480, 'ground').setOrigin(0,0); // ground background
+         
 
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.add.rectangle(0, borderPadding, game.config.width, borderUISize, 0xb3c3cd).setOrigin(0, 0);
        
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -114,6 +124,7 @@ class Play extends Phaser.Scene {
             // display restart game message in parallel with game over
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true; // end the game
+            this.starfield.tilePositionX = 0; // TODO: fix this
         }, null, this);
 
          // display timer
@@ -137,7 +148,7 @@ class Play extends Phaser.Scene {
 
     // constant updates in game canvas
     update() {
-
+        console.log(this.clock);
         // timer
         this.timer.text = Math.floor(this.clock.getRemainingSeconds());
         
@@ -151,8 +162,11 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        // update tile sprite
-        this.starfield.tilePositionX -= 4; // create moving starfield background
+        // update tile sprite horizontal scrolling
+        this.starfield.tilePositionX -= 1.5; // create moving starfield background
+        this.clouds.tilePositionX -= 1; // right - moving clouds
+        this.fog.tilePositionX -= 0.25; // right - slower moving fog
+        this.ground.tilePositionX -= 0.5; // right - moving ground
         
         if (!this.gameOver) {
             // update rocket class
@@ -168,6 +182,7 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset(); // reset rocket to "ground"
             this.shipExplode(this.ship03); // reset ship03 position
+
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset(); // reset rocket to "ground"
