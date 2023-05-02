@@ -24,7 +24,6 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
-        // this.load.spritesheet('stars', './assets/background/stars.png', {frameWidth: 640, frameHeight: 480, startFrame: 0, endFrame: 9});
     }
 
     // create objects and instances in phaser canvas
@@ -32,7 +31,6 @@ class Play extends Phaser.Scene {
         
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0); // place background tile sprite
         this.fog = this.add.tileSprite(0, 0, 640, 480, 'fog').setOrigin(0,0); // fog background
-        // this.stars = this.add.tileSprite(0, 50, 640, 480, 'stars').setOrigin(0,0); // stars background
         this.clouds = this.add.tileSprite(0, -80, 640, 480, 'clouds').setOrigin(0,0); // clouds background
         this.ground = this.add.tileSprite(0, 90, 640, 480, 'ground').setOrigin(0,0); // ground background
          
@@ -78,20 +76,7 @@ class Play extends Phaser.Scene {
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
             frameRate: 30
-        });
-
-        // // animation config - stars sparkling
-        // this.anims.create({
-        //     key: 'sparkle',
-        //     frameRate: 7,
-        //     frames: this.anims.generateFrameNumbers('stars', { start: 0, end: 10}),
-        //     repeat: -1,
-        //     reverse: true
-        // });
-
-        // var stars = this.add.sprite(640, 480, 'stars');
-        // stars.play('sparkle');
-        
+        });        
 
         // initialize score
         this.p1Score = 0;
@@ -189,11 +174,6 @@ class Play extends Phaser.Scene {
         this.clouds.tilePositionX -= 1; // right - moving clouds
         this.fog.tilePositionX -= 0.25; // right - slower moving fog
         this.ground.tilePositionX -= 0.5; // right - moving ground
-
-        // this.stars.alpha = 1
-        // if (this.stars.alpha > 0){
-        //     this.stars.alpha -= 0.25;
-        // }
 
         
         if (!this.gameOver) {
