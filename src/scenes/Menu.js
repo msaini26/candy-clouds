@@ -13,6 +13,8 @@ class Menu extends Phaser.Scene {
 
         // title screen background
         this.load.image('background', './assets/background/title_sky.png'); // sky background image
+        this.load.spritesheet('stars', './assets/background/title_stars.png', {frameWidth: 640, frameHeight: 480, startFrame: 0, endFrame: 9});
+
     }
 
 
@@ -20,6 +22,22 @@ class Menu extends Phaser.Scene {
     create () {
         // display title image
         this.background = this.add.tileSprite(0, 0, 640, 480, 'background').setOrigin(0, 0); // place background tile sprite
+        // this.stars = this.add.tileSprite(0, 150, 640, 480, 'stars').setOrigin(0,0); // stars background
+
+        // animation config - stars sparkling
+        this.anims.create({
+            key: 'sparkle',
+            frameRate: 6,
+            frames: this.anims.generateFrameNumbers('stars', { start: 0, end: 10}),
+            repeat: -1,
+            reverse: false
+        });
+
+        var stars = this.add.sprite(350, 400, 'stars');
+        var more_stars = this.add.sprite(300, 150, 'stars');
+
+        stars.play('sparkle');
+        more_stars.play('sparkle');
 
 
         // set menu configurations
