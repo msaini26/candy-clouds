@@ -50,17 +50,37 @@ class Menu extends Phaser.Scene {
             fontSize: '28px',
             align: 'center',
         };
+
+        // cloud background
+        // top row clouds
+        this.add.circle(145, 95, 50, "0xe7d3ea"); // top left circle
+        this.add.circle(220, 60, 50, "0xe7d3ea"); 
+        this.add.circle(380, 65, 40, "0xe7d3ea");
+        this.add.circle(300, 85, 50, "0xe7d3ea");
+        this.add.circle(460, 85, 50, "0xe7d3ea");
+
+        // bottom row clouds
+        this.add.circle(145, 145, 50, "0xe7d3ea"); // bottom left circle
+        this.add.circle(225, 135, 50, "0xe7d3ea"); 
+        this.add.circle(285, 155, 50, "0xe7d3ea"); 
+        this.add.circle(365, 140, 50, "0xe7d3ea"); 
+        this.add.circle(505, 155, 35, "0xe7d3ea"); 
+        this.add.circle(435, 145, 60, "0xe7d3ea"); 
+
+
+        this.add.circle(110, 120, 50, "0xe7d3ea"); // left circle
+        this.add.circle(530, 105, 50, "0xe7d3ea"); // right circle
+        this.add.rectangle(320, 115, 420, 100, "0xe7d3ea"); // rectangle middle
         
         // show menu text
-        // TODO: fix circle
-        // this.circle = this.add.circle(game.config.width/2, game.config.height/4 - borderUISize - borderPadding)
         this.add.text(game.config.width/6, game.config.height/4 - borderUISize - borderPadding, 'Candy Clouds', titleConfig);
 
+
         // this.add.text(game.config.width/2, game.config.height/4 - borderUISize - borderPadding, 'CANDY CLOUDS', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', subConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.5, 'Use ←→ arrows to move & (F) to fire', subConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', subConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.5 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', subConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
