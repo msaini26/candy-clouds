@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         this.load.image('fog', './assets/background/fog.png'); // fog background image
         this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
         this.load.image('ground', './assets/background/ground.png'); // clouds background image
+        // this.load.image('stars', './assets/background/stars_1.png'); // fade stars
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
@@ -23,14 +24,15 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        // this.load.spritesheet('stars', './assets/background/stars.png', {frameWidth: 640, frameHeight: 480, startFrame: 0, endFrame: 9});
     }
-
 
     // create objects and instances in phaser canvas
     create() {
         
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0); // place background tile sprite
         this.fog = this.add.tileSprite(0, 0, 640, 480, 'fog').setOrigin(0,0); // fog background
+        // this.stars = this.add.tileSprite(0, 50, 640, 480, 'stars').setOrigin(0,0); // stars background
         this.clouds = this.add.tileSprite(0, -80, 640, 480, 'clouds').setOrigin(0,0); // clouds background
         this.ground = this.add.tileSprite(0, 90, 640, 480, 'ground').setOrigin(0,0); // ground background
          
@@ -71,12 +73,25 @@ class Play extends Phaser.Scene {
         var music = this.sound.add('background_music', musicConfig);
         music.play(musicConfig); // play music with config settings
 
-        //animation config
+        //animation config - ship explosion
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
             frameRate: 30
         });
+
+        // // animation config - stars sparkling
+        // this.anims.create({
+        //     key: 'sparkle',
+        //     frameRate: 7,
+        //     frames: this.anims.generateFrameNumbers('stars', { start: 0, end: 10}),
+        //     repeat: -1,
+        //     reverse: true
+        // });
+
+        // var stars = this.add.sprite(640, 480, 'stars');
+        // stars.play('sparkle');
+        
 
         // initialize score
         this.p1Score = 0;
@@ -124,7 +139,6 @@ class Play extends Phaser.Scene {
             // display restart game message in parallel with game over
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true; // end the game
-            this.starfield.tilePositionX = 0; // TODO: fix this
         }, null, this);
 
          // display timer
@@ -142,7 +156,7 @@ class Play extends Phaser.Scene {
         }
 
         // timer
-        this.timer = this.add.text(borderUISize + borderPadding * 45, borderUISize + borderPadding * 35, 60, clockConfig);
+        this.timer = this.add.text(borderUISize + borderPadding * 48, borderUISize + borderPadding * 35, 60, clockConfig);
         clockConfig.fixedWidth = 0;
     }
 
@@ -152,6 +166,14 @@ class Play extends Phaser.Scene {
         // timer
         this.timer.text = Math.floor(this.clock.getRemainingSeconds());
         
+        // freeze all tile sprites when game is over - cancel out movement
+        if (this.gameOver) {
+            this.starfield.tilePositionX += 1.5; 
+            this.clouds.tilePositionX += 1; 
+            this.fog.tilePositionX += 0.25; 
+            this.ground.tilePositionX += 0.5;
+        }
+
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart(); // reset the scene
@@ -167,6 +189,12 @@ class Play extends Phaser.Scene {
         this.clouds.tilePositionX -= 1; // right - moving clouds
         this.fog.tilePositionX -= 0.25; // right - slower moving fog
         this.ground.tilePositionX -= 0.5; // right - moving ground
+
+        // this.stars.alpha = 1
+        // if (this.stars.alpha > 0){
+        //     this.stars.alpha -= 0.25;
+        // }
+
         
         if (!this.gameOver) {
             // update rocket class
@@ -207,10 +235,19 @@ class Play extends Phaser.Scene {
         }
     }
 
+    // adds time to game clock if player hits a ship
+    // Inputs: miliseconds
+    // Output: nothing, just setting time
+    addTime(miliseconds)  {
+        this.clock.delay += miliseconds;
+    }
+
     // use explode automation when ship collides
     // Inputs: ship
     // Output: None, just display explosion animation
     shipExplode(ship) {
+        this.addTime(10000); // add extra time if player hits a ship
+
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
