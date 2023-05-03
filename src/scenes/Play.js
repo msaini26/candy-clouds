@@ -16,7 +16,9 @@ class Play extends Phaser.Scene {
         this.load.image('fog', './assets/background/fog.png'); // fog background image
         this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
         this.load.image('ground', './assets/background/ground.png'); // clouds background image
-        this.load.image('candy', './assets/candy.png'); // speedy candy enemy
+        this.load.image('candy', './assets/enemies/gummy-bear.png'); // speedy candy enemy
+        this.load.image('twisted_candy', './assets/enemies/twisted_candy.png'); // twisted candy enemy
+        this.load.image('beans', './assets/enemies/beans.png'); // jelly beans candy enemy
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
@@ -47,10 +49,10 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding*5, 'rocket').setOrigin(0.5, 0); // place rocket in game canvas frame
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'candy', 0, 30).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 3.5, 'candy', 0, 30).setOrigin(0, 0);
         this.ship01.moveSpeed += 3;
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'twisted_candy', 0, 20).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'beans', 0, 10).setOrigin(0, 0);
 
         // speed enemies up
         var speedUp = this.time.addEvent({
@@ -123,6 +125,7 @@ class Play extends Phaser.Scene {
 
         // add score text
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+        this.scoreLeft.setShadow(2, 2, '#6b74bd');
         // add high score text
         this.highScore = this.add.text(280 + borderUISize + borderPadding, borderUISize + borderPadding * 2, "High Score: " + localStorage.getItem('highscore'), highScoreConfig);
         // GAME OVER flag
