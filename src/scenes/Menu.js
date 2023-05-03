@@ -98,7 +98,6 @@ class Menu extends Phaser.Scene {
         var title = this.add.text(game.config.width/6, game.config.height/4 - borderUISize - borderPadding, 'Candy Clouds', titleConfig);
         title.setShadow(4, 4, '#6b74bd');
 
-        this.add.text(game.config.width/2, game.config.height/1.5, 'Use ←→ arrows to move & (F) to fire', subConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
         this.add.text(game.config.width/2, game.config.height/1.5 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', subConfig).setOrigin(0.5);
