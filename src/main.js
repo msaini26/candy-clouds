@@ -3,7 +3,7 @@ let config = {
     type: Phaser.CANVAS, // init game canvas
     width: 640, // init width
     height: 480, // init height
-    scene: [ GameControls, Menu, Play ] // init menu and play scenes
+    scene: [ Menu, GameControls, Play] // init menu and play scenes
 }
 
 let game = new Phaser.Game(config); // init new phaser game
