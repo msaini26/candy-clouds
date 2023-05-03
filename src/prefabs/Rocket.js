@@ -14,8 +14,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     // update rocket per frame
     update() {
-        // left/right movement in game canvas
-        if(!this.isFiring) {
+
+        // using arrow keys to launch rocket
+        if(!this.isFiring & !mouseMove) {
             if (keyLEFT.isDown && this.x >= borderUISize + this.width) { // move player left
                 this.x -= this.moveSpeed;
             } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) { // move player right
@@ -23,11 +24,25 @@ class Rocket extends Phaser.GameObjects.Sprite {
             }
         }
 
+        // mouse movement to launch rocket
+        if (!this.isFiring && mouseMove) {
+            if (mouse.x >= borderUISize + this.width/2 && mouse.x <= game.config.width - borderUISize - this.width/2) {
+                this.x = mouse.x; // set mouse movement along x axis
+            }
+        }
+
         // fire button
-        if(Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
+        // (f) key to fire
+        if(!mouseMove && Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
             this.isFiring = true;
             this.sfxRocket.play(); // play sfx
         }
+        // click mouse to fire
+        if (mouseMove && mouse.isDown && !this.isFiring) {
+            this.isFiring = true;
+            this.sfxRocket.play(); // play sfx
+        }
+
         // if fired, move up
         if (this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
             this.y -= this.moveSpeed; // move firing icon up
@@ -45,5 +60,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
     reset() {
         this.isFiring = false;
         this.y = game.config.height - borderUISize - borderPadding;
+
+        // need to reset mouse location with mouse use
+        if (mouseMove) {
+            this.x = mouse.x;
+        }
     }
 }
