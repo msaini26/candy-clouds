@@ -16,11 +16,9 @@ class Play extends Phaser.Scene {
         this.load.image('fog', './assets/background/fog.png'); // fog background image
         this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
         this.load.image('ground', './assets/background/ground.png'); // clouds background image
-        // this.load.image('stars', './assets/background/stars_1.png'); // fade stars
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
-        this.sound.decodeAudio('background_music', './assets/background_music.mp3');
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
@@ -58,6 +56,9 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
+        // define mouse
+        mouse = this.input.mousePointer;
+
         // background music configurations
         let musicConfig = {
             mute: false,
@@ -83,7 +84,7 @@ class Play extends Phaser.Scene {
 
         // display score
         let scoreConfig = {
-            fontFamily:'Courier', // set font
+            fontFamily:'chicken-pie', // set font
             fontSize: '28px', // set font size
             backgroundColor: '#F3B141', // set score background color
             color: '#843605', // set text color
@@ -97,7 +98,7 @@ class Play extends Phaser.Scene {
 
         // display score
         let highScoreConfig = {
-            fontFamily:'Courier', // set font
+            fontFamily:'comic-story', // set font
             fontSize: '28px', // set font size
             backgroundColor: '#F3B141', // set score background color
             color: '#843605', // set text color
@@ -128,7 +129,7 @@ class Play extends Phaser.Scene {
 
          // display timer
          let clockConfig = {
-            fontFamily:'Courier', // set font
+            fontFamily:'chicken-pie', // set font
             fontSize: '28px', // set font size
             backgroundColor: '#F3B141', // set score background color
             color: '#843605', // set text color
