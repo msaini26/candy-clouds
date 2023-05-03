@@ -7,7 +7,7 @@ class Play extends Phaser.Scene {
     // preload assets
     preload() {
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png'); // player rocket image
+        this.load.image('rocket', './assets/jar.png'); // player rocket image
         this.load.image('spaceship', './assets/spaceship.png'); // spaceship enemy image
 
         // background layer assets credit to craftpix.net
@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         this.load.image('fog', './assets/background/fog.png'); // fog background image
         this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
         this.load.image('ground', './assets/background/ground.png'); // clouds background image
+        this.load.image('candy', './assets/candy.png'); // speedy candy enemy
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
@@ -43,12 +44,22 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);    
        
         // add rocket (p1)
-        this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0); // place rocket in game canvas frame
+        this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding*5, 'rocket').setOrigin(0.5, 0); // place rocket in game canvas frame
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'spaceship', 0, 30).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'candy', 0, 30).setOrigin(0, 0);
+        this.ship01.moveSpeed += 3;
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0, 0);
+
+        // speed enemies up
+        var speedUp = this.time.addEvent({
+            delay: 30000,                // ms
+            callback: this.speedUp,
+            //args: [],
+            callbackScope: this,
+            loop: true
+        });
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F); 
@@ -86,8 +97,8 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily:'chicken-pie', // set font
             fontSize: '28px', // set font size
-            backgroundColor: '#F3B141', // set score background color
-            color: '#843605', // set text color
+            backgroundColor: '#e7c9ff', // set score background color
+            color: '#FFFFFF', // set text color
             align: 'center', // align score to the center
             padding: { // set padding around text
                 top: 5,
@@ -100,8 +111,8 @@ class Play extends Phaser.Scene {
         let highScoreConfig = {
             fontFamily:'comic-story', // set font
             fontSize: '28px', // set font size
-            backgroundColor: '#F3B141', // set score background color
-            color: '#843605', // set text color
+            backgroundColor: '#e7c9ff', // set score background color
+            color: '#FFFFFF', // set text color
             align: 'center', // align score to the center
             padding: { // set padding around text
                 top: 5,
@@ -131,26 +142,60 @@ class Play extends Phaser.Scene {
          let clockConfig = {
             fontFamily:'chicken-pie', // set font
             fontSize: '28px', // set font size
-            backgroundColor: '#F3B141', // set score background color
-            color: '#843605', // set text color
+            backgroundColor: '#e7c9ff', // set score background color
+            color: '#FFFFFF', // set text color
             align: 'center', // align score to the center
             padding: { // set padding around text
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 50 // set max width
+        };
+
+        // display fire ui
+        let fireConfig = {
+            fontFamily:'chicken-pie', // set font
+            fontSize: '28px', // set font size
+            backgroundColor: '#e37fff', // set score background color
+            color: '#fcf6fe', // set text color
+            align: 'center', // align score to the center
+            padding: { // set padding around text
+                top: 5,
+                bottom: 5,
+                right: 5,
+                left: 5
+            },
+            fixedWidth: 100 // set max width
         }
 
         // timer
         this.timer = this.add.text(borderUISize + borderPadding * 48, borderUISize + borderPadding * 35, 60, clockConfig);
+        this.timer.setShadow(2, 2, '#6b74bd');
         clockConfig.fixedWidth = 0;
+
+        //FIRE ui text
+        scoreConfig.backgroundColor = '#e7c9ff';
+        scoreConfig.color = '#fcf6fe';
+        this.fireText = this.add.text(game.config.width/2.9, borderUISize * 2.3, 'FIRE', fireConfig).setOrigin(0.5);
+        this.fireText.setVisible(false);
+
+        
     }
 
     // constant updates in game canvas
     update() {
-        console.log(this.clock);
+       
+        //display fire ui
+        if(this.p1Rocket.isFiring){
+            this.fireText.setVisible(true);
+        } else{
+            this.fireText.setVisible(false);
+        }
+
+
         // timer
         this.timer.text = Math.floor(this.clock.getRemainingSeconds());
+
         
         // freeze all tile sprites when game is over - cancel out movement
         if (this.gameOver) {
@@ -261,4 +306,17 @@ class Play extends Phaser.Scene {
 
         this.sound.play('sfx_explosion'); // play explosion sound effects
     }
+
+    // speeds up ships
+    // Inputs: None
+    // Outputs: None, just speed up ships
+    speedUp(){
+
+        console.log("ships speeding up!");
+        this.ship01.moveSpeed *= 1.5;
+        this.ship02.moveSpeed *= 1.5;
+        this.ship03.moveSpeed *= 1.5;
+    
+    }
+
 }
