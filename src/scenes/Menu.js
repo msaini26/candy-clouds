@@ -17,18 +17,16 @@ class Menu extends Phaser.Scene {
 
     }
 
-
     // create objects and instances in phaser canvas
     create () {
         // display title image
         this.background = this.add.tileSprite(0, 0, 640, 480, 'background').setOrigin(0, 0); // place background tile sprite
-        // this.stars = this.add.tileSprite(0, 150, 640, 480, 'stars').setOrigin(0,0); // stars background
 
         // animation config - stars sparkling
         this.anims.create({
             key: 'sparkle',
             frameRate: 6,
-            frames: this.anims.generateFrameNumbers('stars', { start: 0, end: 10}),
+            frames: this.anims.generateFrameNumbers('stars'),
             repeat: -1,
             reverse: false
         });
@@ -60,6 +58,12 @@ class Menu extends Phaser.Scene {
             fontFamily: 'candy-shop', // set font
             fontSize: '68px',
             align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+                right: 5,
+                left: 5
+            }
         };
 
         // subtitle font configuration
@@ -91,10 +95,9 @@ class Menu extends Phaser.Scene {
         this.add.rectangle(320, 115, 420, 100, "0xe7d3ea"); // rectangle middle
         
         // show menu text
-        this.add.text(game.config.width/6, game.config.height/4 - borderUISize - borderPadding, 'Candy Clouds', titleConfig);
+        var title = this.add.text(game.config.width/6, game.config.height/4 - borderUISize - borderPadding, 'Candy Clouds', titleConfig);
+        title.setShadow(4, 4, '#6b74bd');
 
-
-        // this.add.text(game.config.width/2, game.config.height/4 - borderUISize - borderPadding, 'CANDY CLOUDS', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/1.5, 'Use ←→ arrows to move & (F) to fire', subConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
@@ -115,7 +118,7 @@ class Menu extends Phaser.Scene {
                 gameTimer: 61000
             }
             this.sound.play('sfx_select'); // play background music
-            this.scene.start('playScene');
+            this.scene.start('controlsScene');
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             // hard mode
@@ -124,7 +127,7 @@ class Menu extends Phaser.Scene {
                 gameTimer: 46000
             }
             this.sound.play('sfx_select');
-            this.scene.start('playScene');
+            this.scene.start('controlsScene');
         }
     }
 }
