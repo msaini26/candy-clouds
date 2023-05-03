@@ -3,7 +3,7 @@ let config = {
     type: Phaser.CANVAS, // init game canvas
     width: 640, // init width
     height: 480, // init height
-    scene: [ Menu, Play ] // init menu and play scenes
+    scene: [ GameControls, Menu, Play ] // init menu and play scenes
 }
 
 let game = new Phaser.Game(config); // init new phaser game
@@ -14,3 +14,6 @@ let borderPadding = borderUISize / 3; // set padding around game frame
 
 // reserve keyboard vars
 let keyF, keyR, keyLEFT, keyRIGHT; 
+
+// reserve mouse var
+let mouse, mouseMove;
