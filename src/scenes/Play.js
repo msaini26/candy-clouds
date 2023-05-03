@@ -13,12 +13,14 @@ class Play extends Phaser.Scene {
         // background layer assets credit to craftpix.net
         // from their website, "You can download it absolutely for free and use it in your games for commercial purposes."
         this.load.image('starfield', './assets/background/sky.png'); // sky background image
+        this.load.image('starry', './assets/background/stars_1.png'); // background stars
         this.load.image('fog', './assets/background/fog.png'); // fog background image
         this.load.image('clouds', './assets/background/cloud_smaller.png'); // clouds background image
         this.load.image('ground', './assets/background/ground.png'); // clouds background image
         this.load.image('candy', './assets/enemies/gummy-bear.png'); // speedy candy enemy
         this.load.image('twisted_candy', './assets/enemies/twisted_candy.png'); // twisted candy enemy
         this.load.image('beans', './assets/enemies/beans.png'); // jelly beans candy enemy
+        this.load.image('egg', './assets/enemies/egg.png'); // egg (subtracts time)
 
         // load background music
         this.load.audio('background_music', './assets/background_music.mp3');
@@ -31,6 +33,7 @@ class Play extends Phaser.Scene {
     create() {
         
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0); // place background tile sprite
+        this.starry = this.add.tileSprite(0, 0, 640, 480, 'starry').setOrigin(0, 0); // stars background
         this.fog = this.add.tileSprite(0, 0, 640, 480, 'fog').setOrigin(0,0); // fog background
         this.clouds = this.add.tileSprite(0, -80, 640, 480, 'clouds').setOrigin(0,0); // clouds background
         this.ground = this.add.tileSprite(0, 90, 640, 480, 'ground').setOrigin(0,0); // ground background
@@ -39,20 +42,16 @@ class Play extends Phaser.Scene {
         // green UI background
         this.add.rectangle(0, borderPadding, game.config.width, borderUISize, 0xb3c3cd).setOrigin(0, 0);
        
-        // white borders
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);    
-       
+     
         // add rocket (p1)
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding*5, 'rocket').setOrigin(0.5, 0); // place rocket in game canvas frame
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 3.5, 'candy', 0, 30).setOrigin(0, 0);
-        this.ship01.moveSpeed += 3;
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'twisted_candy', 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'beans', 0, 10).setOrigin(0, 0);
+        this.gummy = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 3.5, 'candy', 0, 30).setOrigin(0, 0);
+        this.gummy.moveSpeed += 3;
+        this.twisted_candy = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'twisted_candy', 0, 20).setOrigin(0, 0);
+        this.beans = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'beans', 0, 10).setOrigin(0, 0);
+        this.egg = new Egg(this, borderUISize * 7, borderUISize * 4 + borderPadding * 2, 'egg', 0, 10).setOrigin(0, 0); 
 
         // speed enemies up
         var speedUp = this.time.addEvent({
@@ -182,6 +181,11 @@ class Play extends Phaser.Scene {
         this.fireText = this.add.text(game.config.width/2.9, borderUISize * 2.3, 'FIRE', fireConfig).setOrigin(0.5);
         this.fireText.setVisible(false);
 
+        // white borders
+        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);    
         
     }
 
@@ -230,24 +234,25 @@ class Play extends Phaser.Scene {
             this.p1Rocket.update(); // update rocket sprite
 
             // update spaceships (x3)
-            this.ship01.update();
-            this.ship02.update();
-            this.ship03.update();
+            this.gummy.update();
+            this.twisted_candy.update();
+            this.beans.update(); // update 
+            this.egg.update(); // update enemy egg
         }   
 
         // checks collisions
-        if (this.checkCollision(this.p1Rocket, this.ship03)) {
+        if (this.checkCollision(this.p1Rocket, this.egg)) {
             this.p1Rocket.reset(); // reset rocket to "ground"
-            this.shipExplode(this.ship03); // reset ship03 position
+            this.shipExplode(this.egg); // reset egg position
 
         }
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
+        if (this.checkCollision(this.p1Rocket, this.twisted_candy)) {
             this.p1Rocket.reset(); // reset rocket to "ground"
-            this.shipExplode(this.ship02); // reset ship03 position
+            this.shipExplode(this.twisted_candy); // reset twisted_candy position
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
+        if (this.checkCollision(this.p1Rocket, this.gummy)) {
             this.p1Rocket.reset(); // reset rocket to "ground"
-            this.shipExplode(this.ship01); // reset ship03 position
+            this.shipExplode(this.gummy); // reset gummy position
         }
         
     }
@@ -275,7 +280,7 @@ class Play extends Phaser.Scene {
     // Inputs: ship
     // Output: None, just display explosion animation
     shipExplode(ship) {
-        this.addTime(10000); // add extra time if player hits a ship
+        this.addTime(5000); // add extra time if player hits a ship
 
         // temporarily hide ship
         ship.alpha = 0;
@@ -316,9 +321,9 @@ class Play extends Phaser.Scene {
     speedUp(){
 
         console.log("ships speeding up!");
-        this.ship01.moveSpeed *= 1.5;
-        this.ship02.moveSpeed *= 1.5;
-        this.ship03.moveSpeed *= 1.5;
+        this.gummy.moveSpeed *= 1.5;
+        this.twisted_candy.moveSpeed *= 1.5;
+        this.egg.moveSpeed *= 1.5;
     
     }
 
