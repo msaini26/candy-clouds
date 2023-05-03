@@ -61,15 +61,50 @@ class GameControls extends Phaser.Scene {
             align: 'center',
         };
 
+        // paragraph font configuration
+        let paragraphConfig = {
+            fontFamily: 'comic-story',
+            fontSize: '28px',
+            align: 'center',
+        };
+        
+        //keyboard title
+        this.add.rectangle(125, 157, 140, 48, 0xe7d3ea).setOrigin(0, 0);
+        this.add.circle(150, 160, 18, "0xe7d3ea"); 
+        this.add.circle(180, 150, 22, "0xe7d3ea"); 
+        this.add.circle(210, 150, 12, "0xe7d3ea"); 
+        this.add.circle(237, 155, 17, "0xe7d3ea"); 
+        this.add.circle(125, 157, 24, 0xe7d3ea).setOrigin(0.5, 0);
+        this.add.circle(265, 157, 24, 0xe7d3ea).setOrigin(0.5, 0);
+        this.add.text(200, 180, 'Keyboard', subConfig).setOrigin(0.5);
+  
+        // mouse background cloud  
+        this.add.rectangle(370, 157, 140, 48, 0xe7d3ea).setOrigin(0, 0);
+        this.add.circle(400, 160, 18, "0xe7d3ea"); 
+        this.add.circle(430, 150, 22, "0xe7d3ea"); 
+        this.add.circle(460, 150, 12, "0xe7d3ea"); 
+        this.add.circle(487, 155, 17, "0xe7d3ea"); 
+        this.add.circle(375, 157, 24, 0xe7d3ea).setOrigin(0.5, 0); // left circle
+        this.add.circle(510, 157, 24, 0xe7d3ea).setOrigin(0.5, 0); // right circle
+        // mouse text
+        this.add.text(445, 180, 'Mouse', subConfig).setOrigin(0.5);
+
+    
+  
+        
+
+
+
+
      
         // show menu text
-        this.add.text(game.config.width/6, game.config.height/4 - borderUISize - borderPadding, 'Game Controls', titleConfig);
+        var title = this.add.text(game.config.width/6, game.config.height/7 - borderUISize - borderPadding, 'Game Controls', titleConfig);
 
 
-        this.add.text(game.config.width/2, game.config.height/1.5, 'Use ←→ arrows to move & (F) to fire', subConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.5, 'Use ←→ arrows to move & (F) to fire', paragraphConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/1.5 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', subConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.5 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', paragraphConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
