@@ -1,4 +1,4 @@
-# cmpm-120-notes
+# Rocket Patrol-Inspired Game
 - Play the game here 👉 https://msaini26.github.io/rocket-patrol-mod/
 
 # Modification Idea
