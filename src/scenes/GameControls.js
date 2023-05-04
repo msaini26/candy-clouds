@@ -77,6 +77,9 @@ class GameControls extends Phaser.Scene {
         this.add.circle(125, 157, 24, 0xe7d3ea).setOrigin(0.5, 0);
         this.add.circle(265, 157, 24, 0xe7d3ea).setOrigin(0.5, 0);
         this.add.text(200, 180, 'Keyboard', subConfig).setOrigin(0.5); // keyboard title
+
+        // or text
+        this.add.text(320, 170, "OR", subConfig).setOrigin(0, 0);
   
         // mouse background cloud  
         this.add.rectangle(400, 157, 140, 48, 0xe7d3ea).setOrigin(0, 0);
