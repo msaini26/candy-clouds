@@ -254,6 +254,10 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset(); // reset rocket to "ground"
             this.shipExplode(this.gummy); // reset gummy position
         }
+        if (this.checkCollision(this.p1Rocket, this.beans)) {
+            this.p1Rocket.reset(); // reset rocket to "ground"
+            this.shipExplode(this.beans); // reset beans position
+        }
         
     }
 
@@ -276,11 +280,23 @@ class Play extends Phaser.Scene {
         this.clock.delay += miliseconds;
     }
 
+    // remove time from game clock if player hits the egg
+    // Inputs: miliseconds
+    // Output: nothing, just setting time
+    removeTime(miliseconds)  {
+        this.clock.delay -= miliseconds;
+    }
+
     // use explode automation when ship collides
     // Inputs: ship
     // Output: None, just display explosion animation
     shipExplode(ship) {
-        this.addTime(5000); // add extra time if player hits a ship
+        if (ship != this.egg) {
+            this.addTime(5000); // add extra time if player hits a ship
+        }
+        else if (ship == this.egg) {
+            this.removeTime(5000); // remove time if player hits the egg
+        }
 
         // temporarily hide ship
         ship.alpha = 0;
