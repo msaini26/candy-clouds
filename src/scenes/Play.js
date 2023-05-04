@@ -50,8 +50,8 @@ class Play extends Phaser.Scene {
         this.gummy = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 3.5, 'candy', 0, 30).setOrigin(0, 0);
         this.gummy.moveSpeed += 3;
         this.twisted_candy = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'twisted_candy', 0, 20).setOrigin(0, 0);
-        this.beans = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'beans', 0, 10).setOrigin(0, 0);
-        this.egg = new Egg(this, borderUISize * 7, borderUISize * 4 + borderPadding * 2, 'egg', 0, 10).setOrigin(0, 0); 
+        this.egg = new Egg(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'egg', 0, 10).setOrigin(0, 0);
+        this.beans = new Spaceship(this, borderUISize * 7, borderUISize * 4 + borderPadding * 2, 'beans', 0, 10).setOrigin(0, 0); 
 
         // speed enemies up
         var speedUp = this.time.addEvent({
@@ -295,7 +295,7 @@ class Play extends Phaser.Scene {
             this.addTime(5000); // add extra time if player hits a ship
         }
         else if (ship == this.egg) {
-            this.removeTime(5000); // remove time if player hits the egg
+            this.removeTime(10000); // remove time if player hits the egg
         }
 
         // temporarily hide ship
@@ -340,6 +340,7 @@ class Play extends Phaser.Scene {
         this.gummy.moveSpeed *= 1.5;
         this.twisted_candy.moveSpeed *= 1.5;
         this.egg.moveSpeed *= 1.5;
+        this.beans.moveSpeed * 1.5; 
     
     }
 
