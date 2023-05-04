@@ -1,5 +1,5 @@
 # Rocket Patrol-Inspired Game
-- Play the game here 👉 https://msaini26.github.io/rocket-patrol-mod/
+- Play the game here 👉 https://msaini26.github.io/candy-clouds/
 
 # Modification Idea
 
