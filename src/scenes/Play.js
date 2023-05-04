@@ -284,7 +284,7 @@ class Play extends Phaser.Scene {
     // Inputs: miliseconds
     // Output: nothing, just setting time
     removeTime(miliseconds)  {
-        this.clock.delay -= miliseconds;
+        this.clock.delay -= 20000;
     }
 
     // use explode automation when ship collides
