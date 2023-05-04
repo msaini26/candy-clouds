@@ -284,7 +284,7 @@ class Play extends Phaser.Scene {
     // Inputs: miliseconds
     // Output: nothing, just setting time
     removeTime(miliseconds)  {
-        this.clock.delay -= 20000;
+        this.clock.delay -= miliseconds;
     }
 
     // use explode automation when ship collides
@@ -295,7 +295,7 @@ class Play extends Phaser.Scene {
             this.addTime(5000); // add extra time if player hits a ship
         }
         else if (ship == this.egg) {
-            this.removeTime(10000); // remove time if player hits the egg
+            this.removeTime(20000); // remove time if player hits the egg
         }
 
         // temporarily hide ship

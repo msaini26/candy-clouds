@@ -38,7 +38,7 @@ Time: 30+ hours approximately
 
 ✅ Implement a new timing/scoring mechanism that adds time to the clock for successful hits (15)
     - adds 5ish seconds for each successful hit
-        (bonus: working on adding an enemy egg that decreases the time left if you hit it)
+        (bonus: added an enemy egg that decreases the time left if you hit it - 20 seconds)
 
 ✅ Implement mouse control for player movement and mouse click to fire (15)
      - choose mouse control in the controls menu before continuing into the game
@@ -58,7 +58,7 @@ let config = {
     type: Phaser.CANVAS, // init game canvas
     width: 640, // init width
     height: 480, // init height
-    scene: [ Menu, GameControls, Play] // init menu and play scenes
+    scene: [Menu, Rules,  GameControls, Play] // init menu and play scenes
 }
 
 let game = new Phaser.Game(config); // init new phaser game
