@@ -28,6 +28,7 @@ Time: 30+ hours approximately
 
 ✅ Create a new title screen (e.g., new artwork, typography, layout) (10)
     - candy clouds home page and controls page to teach player controls
+    - (bonus: added controls and rules pages of game)
 
 ✅ Implement parallax scrolling for the background (10)
     - fog moves at a different speed than the clouds and the ground
